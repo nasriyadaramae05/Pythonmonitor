@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ระบบสารสนเทศภัยพิบัติดินถล่มภาคใต้</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#1e3d2f;--forest2:#2c5540;--moss:#4a7c59;--amber:#d9821f;--amber2:#f0a94a;
+    --danger:#b4341f;--cream:#f8f5ef;--paper:#fffdf9;--sand:#e9e2d5;
+    --ink:#242a26;--muted:#6b7269;--line:#ddd5c7;
+    --shadow:0 4px 18px rgba(30,61,47,.09);--r:14px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:"IBM Plex Sans Thai",system-ui,sans-serif;line-height:1.75;font-size:16px}
+  h1,h2,h3,h4{font-family:"IBM Plex Sans Thai Looped","IBM Plex Sans Thai",sans-serif;margin:0;line-height:1.35}
+  a{color:var(--forest2)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  header{position:sticky;top:0;z-index:1000;background:rgba(30,61,47,.97);
+    border-bottom:3px solid var(--amber);backdrop-filter:blur(8px)}
+  .hd{max-width:1180px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:14px}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
+  .brand svg{width:42px;height:42px;flex:0 0 auto}
+  .brand b{display:block;font-size:15.5px;color:#fff;line-height:1.25}
+  .brand span{font-size:9.5px;color:#b9d3c3;letter-spacing:.4px}
+  nav{margin-left:auto;display:flex;gap:1px;flex-wrap:wrap}
+  nav a{color:#d7e6dc;text-decoration:none;font-size:13px;padding:6px 10px;border-radius:8px;transition:.18s;white-space:nowrap}
+  nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+  nav a.hot{color:#ffd79a}
+  .burger{display:none;margin-left:auto;background:none;border:1px solid #5c7d6a;color:#fff;
+    padding:6px 11px;border-radius:8px;font-size:18px;cursor:pointer;font-family:inherit}
+
+  .hero{background:linear-gradient(150deg,#1c3a2d,#2c5540 60%,#3c6b4f);color:#fff;padding:50px 0 54px}
+  .hgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  .hero .kick{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--amber2);background:rgba(240,169,74,.16);padding:5px 13px;border-radius:999px;margin-bottom:15px}
+  .hero h1{font-size:clamp(24px,3.7vw,38px);margin-bottom:13px}
+  .hero h1 em{color:var(--amber2);font-style:normal}
+  .hero p{color:#cfe0d4;font-size:15.5px;max-width:580px;margin:0 0 20px}
+  .btn{display:inline-block;padding:11px 20px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14.5px;transition:.2s}
+  .btn.p{background:var(--amber);color:#2a1500}
+  .btn.g{border:1.5px solid rgba(255,255,255,.4);color:#fff;margin-left:9px}
+
+  section{padding:50px 0;scroll-margin-top:78px}
+  section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  section.dark{background:var(--forest);color:#e7efe9}
+  .tag{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--amber);background:rgba(217,130,31,.12);padding:4px 12px;border-radius:999px;margin-bottom:12px}
+  section.dark .tag{background:rgba(240,169,74,.16);color:var(--amber2)}
+  h2.sec{font-size:clamp(21px,2.8vw,28px);margin-bottom:10px}
+  section.dark h2.sec{color:#fff}
+  .lead{color:var(--muted);max-width:880px;margin-bottom:24px;font-size:15.5px}
+  section.dark .lead{color:#bcd2c5}
+
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);transition:.2s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(30,61,47,.13)}
+  .card h3{font-size:16px;color:var(--forest);margin-bottom:8px}
+  .card p{font-size:14px;color:var(--muted);margin:0 0 10px}
+  .card .ic{width:42px;height:42px;border-radius:11px;background:rgba(74,124,89,.13);
+    display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:12px}
+  .src{font-size:11.5px;color:var(--moss);border-top:1px dashed var(--line);padding-top:9px;display:block;line-height:1.7}
+  .src a{color:var(--forest2);font-weight:600}
+
+  .formula{background:#12291e;color:#d8ead9;border-radius:12px;padding:14px 18px;
+    font-family:ui-monospace,Consolas,monospace;font-size:13px;margin:16px 0;
+    border-left:4px solid var(--amber);overflow-x:auto;line-height:1.8}
+  .formula em{color:var(--amber2);font-style:normal}
+
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:#fff;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+  th{background:var(--forest);color:#fff;text-align:left;padding:11px 13px;font-weight:600;font-size:13px;white-space:nowrap}
+  td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#faf8f3}
+  tbody tr:hover{background:#f2ede2}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+  .ph{background:#fadbd3;color:#9c2a15}.pm{background:#fbeacb;color:#8a5410}
+  .pl{background:#d9efdc;color:#24633a}
+
+  /* ---------- MAP ---------- */
+  #gmap{height:560px;border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--shadow);z-index:1;background:#e8e4da}
+  .mapbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .mapbar button{font-family:inherit;font-size:13px;padding:8px 14px;border:1px solid var(--line);
+    background:#fff;border-radius:9px;cursor:pointer;font-weight:600;color:var(--ink);transition:.15s}
+  .mapbar button:hover{background:#f1f5ef}
+  .mapbar button.on{background:var(--forest2);color:#fff;border-color:var(--forest2)}
+  .overlaybar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:0 0 12px;
+    font-size:12.5px;color:var(--muted);background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:10px 14px;box-shadow:var(--shadow)}
+  .overlaybar label{display:flex;align-items:center;gap:7px;cursor:pointer;font-weight:600;color:var(--ink)}
+  .overlaybar input{width:15px;height:15px;accent-color:var(--forest2)}
+  #mapstatus{font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:10px;margin-bottom:12px;
+    background:rgba(217,130,31,.12);color:#8a5410;border:1px solid rgba(217,130,31,.3)}
+  #mapstatus.ok{background:rgba(74,124,89,.12);color:#24633a;border-color:rgba(74,124,89,.3)}
+  #mapstatus.err{background:rgba(180,52,31,.1);color:#9c2a15;border-color:rgba(180,52,31,.3)}
+  #gmaperr{display:none}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0;font-size:13px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .dot{width:13px;height:13px;border-radius:50%;display:inline-block}
+  .d1{background:var(--danger)}.d2{background:var(--amber);border:2px dashed #9c6b43}
+  .d3{background:#8a5410}.d4{background:#1d4ed8}
+  .iw{font-family:"IBM Plex Sans Thai",sans-serif;font-size:13px;min-width:250px;line-height:1.6}
+  .iw h4{margin:0 0 4px;font-size:14.5px;color:var(--forest)}
+  .iw .pc{font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--moss)}
+  .iw table{width:100%;border-collapse:collapse;margin-top:6px;font-size:12.5px;min-width:0}
+  .iw td{border-bottom:1px solid #f0ece3;padding:2px 0;vertical-align:top}
+  .iw td:first-child{color:var(--muted);width:86px}
+  .iw a{color:var(--forest2);font-weight:600}
+
+  .gridcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px}
+  .ecard{background:#fff;border:1px solid var(--line);border-left:5px solid var(--danger);border-radius:14px;
+    overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.2s}
+  .ecard:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(30,61,47,.14)}
+  .ecard.watch{border-left-color:var(--amber)}
+  .ecard .body{padding:15px 16px}
+  .ecard .code{font-size:10.5px;font-weight:700;letter-spacing:.5px;color:var(--moss)}
+  .ecard h3{font-size:15.5px;color:var(--forest);margin:3px 0 6px}
+  .ecard p{font-size:13px;color:var(--muted);margin:0 0 9px}
+  .ecard .meta{font-size:12px;color:var(--forest2);font-weight:600}
+
+  .imggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+  .imgcard{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:#fff;box-shadow:var(--shadow);transition:.2s}
+  .imgcard:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(30,61,47,.16)}
+  .imgcard .thumb{height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:6px;color:#fff;font-size:30px}
+  .imgcard .thumb .lab{font-size:11.5px;font-weight:700;letter-spacing:.5px;opacity:.95}
+  .imgcard .cap{padding:13px 15px}
+  .imgcard .cap b{display:block;font-size:14px;color:var(--forest);margin-bottom:4px}
+  .imgcard .cap span{font-size:12px;color:var(--muted);line-height:1.55;display:block}
+  .imgcard .cap .go{font-size:12px;font-weight:700;color:var(--amber);margin-top:7px;display:block}
+
+  .timeline{position:relative;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:3px;background:var(--line);border-radius:2px}
+  .tlrow{position:relative;margin-bottom:18px}
+  .tlrow::before{content:"";position:absolute;left:-24px;top:6px;width:13px;height:13px;border-radius:50%;
+    background:var(--amber);border:3px solid var(--cream)}
+  .tlrow b{font-size:14.5px;color:var(--forest);display:block}
+  .tlrow p{font-size:13.5px;color:var(--muted);margin:2px 0 0}
+
+  .acc{border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:9px;overflow:hidden;box-shadow:var(--shadow)}
+  .acc>summary{cursor:pointer;padding:14px 17px;font-weight:600;font-size:14.5px;color:var(--forest);
+    list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .acc>summary::-webkit-details-marker{display:none}
+  .acc>summary::after{content:"+";font-size:19px;color:var(--amber);font-weight:700}
+  .acc[open]>summary::after{content:"–"}
+  .acc .inner{padding:0 17px 15px;font-size:13.5px;color:var(--muted);line-height:1.75}
+
+  .gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:13px}
+  .gitem{background:#fff;border:1px solid var(--line);border-left:4px solid var(--moss);border-radius:11px;padding:13px 15px;box-shadow:var(--shadow)}
+  .gitem b{font-size:14px;color:var(--forest);display:block;margin-bottom:3px}
+  .gitem span{font-size:12.5px;color:var(--muted);line-height:1.6;display:block}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:13px;margin-bottom:22px}
+  .st-box{background:#fff;border:1px solid var(--line);border-left:4px solid var(--moss);border-radius:11px;padding:13px 15px;box-shadow:var(--shadow)}
+  .st-box b{display:block;font-size:23px;font-weight:700;color:var(--forest);line-height:1.2}
+  .st-box span{font-size:11.5px;color:var(--muted)}
+
+  .phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:13px}
+  .ph-box{background:#fff;border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+  .ph-box b{display:block;font-size:14px;color:var(--forest)}
+  .ph-box .n{font-size:19px;font-weight:700;color:var(--danger)}
+  .ph-box span{font-size:12px;color:var(--muted);display:block;margin-top:3px}
+
+  .note{background:rgba(217,130,31,.1);border:1.5px solid rgba(217,130,31,.35);border-radius:var(--r);
+    padding:14px 18px;font-size:13.5px;color:#6b4410;margin-bottom:20px;line-height:1.7}
+  .note b{color:#8a5410}
+  .warn{background:rgba(180,52,31,.08);border:1.5px solid rgba(180,52,31,.25);border-radius:var(--r);
+    padding:14px 18px;font-size:13.5px;color:#7a2314;margin-bottom:20px;line-height:1.7}
+  .warn b{color:var(--danger)}
+
+  .steps{counter-reset:s;display:grid;gap:12px}
+  .step{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 17px;box-shadow:var(--shadow)}
+  .step::before{counter-increment:s;content:counter(s);flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+    background:var(--forest);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .step b{font-size:15px;color:var(--forest)}
+  .step p{margin:3px 0 0;font-size:13.5px;color:var(--muted)}
+
+  footer{background:var(--forest);color:#c6d8cc;padding:44px 0 24px;font-size:13.5px}
+  footer h4{color:#fff;font-size:15px;margin-bottom:12px}
+  footer a{color:#a9c9b5;text-decoration:none}
+  footer ul{list-style:none;padding:0;margin:0}
+  footer li{margin-bottom:7px;font-size:12.5px;line-height:1.65}
+  .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;margin-bottom:26px}
+  .credit{border-top:1px solid rgba(255,255,255,.16);padding-top:20px;display:flex;justify-content:space-between;
+    gap:18px;flex-wrap:wrap;align-items:center}
+  .credit .av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#9c6b43);
+    color:#2a1500;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+  .credit b{color:#fff;display:block;font-size:14.5px}
+  .credit span{font-size:12px;color:#a9c9b5}
+
+  @media(max-width:940px){.hgrid{grid-template-columns:1fr;gap:30px}.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:860px){.g2,.g3{grid-template-columns:1fr}.fg{grid-template-columns:1fr}}
+  @media(max-width:680px){
+    nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--forest);padding:10px;border-bottom:3px solid var(--amber)}
+    nav.open{display:flex}.burger{display:block}#gmap{height:430px}.g4{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="rgba(255,255,255,.1)" stroke="#f0a94a" stroke-width="2"/>
+        <path d="M9 45 L23 22 L31 33 L38 24 L55 45 Z" fill="#2c5540"/>
+        <path d="M20 41 q7 3 16 1 q-6 7 -16 5 z" fill="#9c6b43" opacity=".85"/>
+        <circle cx="45" cy="20" r="4" fill="#b4341f" stroke="#fff" stroke-width="1.6"/>
+      </svg>
+      <span><b>ระบบสารสนเทศภัยพิบัติดินถล่มภาคใต้</b><span>SOUTHERN LANDSLIDE INFORMATION SYSTEM</span></span>
+    </a>
+    <button class="burger" id="burger" aria-label="เมนู">☰</button>
+    <nav id="nav">
+      <a href="#intro">บทนำ</a>
+      <a href="#types">ประเภท</a>
+      <a href="#mech">กลไก</a>
+      <a href="#timeline">เหตุการณ์</a>
+      <a href="#mapsec" class="hot">แผนที่</a>
+      <a href="#warning">เตือนภัย</a>
+      <a href="#gloss">อภิธาน</a>
+      <a href="#faq">FAQ</a>
+      <a href="#safety">ปลอดภัย</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hgrid">
+    <div>
+      <span class="kick">ระบบสารสนเทศและการเรียนรู้</span>
+      <h1>ภัยพิบัติ<em>ดินถล่ม</em><br>ในพื้นที่ภาคใต้</h1>
+      <p>ศูนย์รวมข้อมูลเชิงพื้นที่ องค์ความรู้จากงานวิจัยในพื้นที่ แผนที่จุดเกิดเหตุรายอำเภอ/ตำบล
+        ระบบเตือนภัยล่วงหน้า และแนวทางรับมือสำหรับประชาชนและหน่วยงานท้องถิ่น</p>
+      <a class="btn p" href="#mapsec">🗺️ แผนที่จุดเกิดเหตุ</a>
+      <a class="btn g" href="#safety">🚨 วิธีรับมือ</a>
+    </div>
+    <figure style="margin:0;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)">
+      <svg viewBox="0 0 560 380" role="img" aria-label="ภาพประกอบเนินเขาที่เกิดดินถล่ม">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#173325"/><stop offset=".55" stop-color="#2c5540"/><stop offset="1" stop-color="#b98f57"/>
+          </linearGradient>
+          <linearGradient id="scar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#b07a45"/><stop offset="1" stop-color="#6f4a2c"/>
+          </linearGradient>
+          <radialGradient id="sun" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#f0a94a" stop-opacity=".85"/><stop offset="1" stop-color="#f0a94a" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="560" height="380" fill="url(#sky)"/>
+        <circle cx="430" cy="100" r="95" fill="url(#sun)"/>
+        <g stroke="#cfe0d4" stroke-width="1.6" opacity=".32" stroke-linecap="round">
+          <line x1="65" y1="38" x2="53" y2="76"/><line x1="130" y1="22" x2="118" y2="60"/>
+          <line x1="200" y1="46" x2="188" y2="84"/><line x1="275" y1="24" x2="263" y2="62"/>
+          <line x1="345" y1="48" x2="333" y2="86"/><line x1="460" y1="30" x2="448" y2="68"/>
+        </g>
+        <path d="M0 252 L74 174 L128 212 L196 148 L268 214 L340 166 L420 224 L500 180 L560 230 L560 380 L0 380 Z" fill="#1c3a2d"/>
+        <path d="M0 316 L96 208 L188 258 L286 158 L392 248 L470 196 L560 258 L560 380 L0 380 Z" fill="#2c5540"/>
+        <path d="M286 158 L322 194 L300 244 L346 298 L318 348 L372 380 L286 380 Z" fill="url(#scar)" opacity=".93"/>
+        <path d="M286 158 L312 204 L298 248" stroke="#d8b184" stroke-width="2.4" fill="none" opacity=".6"/>
+        <g fill="#3f6b4d">
+          <path d="M120 266 l11 -26 l11 26 z"/><path d="M150 280 l9 -22 l9 22 z"/>
+          <path d="M420 238 l12 -28 l12 28 z"/><path d="M452 256 l10 -24 l10 24 z"/>
+        </g>
+        <g>
+          <rect x="360" y="320" width="30" height="20" fill="#e9dcc4"/>
+          <path d="M358 320 L375 306 L392 320 Z" fill="#9c6b43"/>
+          <rect x="398" y="328" width="26" height="16" fill="#e9dcc4"/>
+          <path d="M396 328 L411 316 L426 328 Z" fill="#9c6b43"/>
+        </g>
+        <line x1="452" y1="256" x2="452" y2="286" stroke="#cfe0d4" stroke-width="2"/>
+        <circle cx="452" cy="284" r="5" fill="#f0a94a" stroke="#fff" stroke-width="1.5"/>
+        <rect y="368" width="560" height="12" fill="#1c3a2d" opacity=".7"/>
+      </svg>
+      <figcaption style="background:#12291e;color:#a9c9b5;font-size:12px;padding:10px 15px;margin:0">
+        <b style="color:#f0a94a">ภาพประกอบ</b> — เนินเขาที่เกิดดินถล่มและเซนเซอร์เตือนภัยในพื้นที่เสี่ยง (ไม่ใช่ภาพถ่ายเหตุการณ์จริง)
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="wrap">
+    <span class="tag">บทนำ</span>
+    <h2 class="sec">ทำไมภาคใต้ต้องมีระบบสารสนเทศดินถล่ม</h2>
+    <p class="lead">
+      ภาคใต้ตอนบน–กลางมีเทือกเขาสูงชันต่อเนื่อง และมีชุมชนหนาแน่นตามเชิงเขาและที่ราบลุ่มริมน้ำ
+      ขณะที่ฝนมรสุมตกหนักต่อเนื่องหลายวันได้บ่อยครั้ง ดินถล่มจึงเกิดซ้ำและทวีความรุนแรงขึ้น
+      ระบบสารสนเทศที่รวบรวมแผนที่ งานวิจัย และระบบเตือนภัยไว้ที่เดียว ช่วยให้ชุมชนและหน่วยงานวางแผนรับมือได้ทันการณ์
+    </p>
+    <div class="stats">
+      <div class="st-box"><b>14</b><span>จังหวัดภาคใต้ในขอบเขตระบบ</span></div>
+      <div class="st-box"><b>10</b><span>จังหวัดที่ถูกเตือนพร้อมกัน (พ.ย. 2567)</span></div>
+      <div class="st-box"><b>2</b><span>ฤดูมรสุมที่ฝนชุก</span></div>
+      <div class="st-box"><b>2554</b><span>ปีเหตุการณ์ใหญ่ระดับภาค</span></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ic">🌧️</div><h3>ฝนคือตัวกระตุ้นหลัก</h3>
+        <p>ฝนสะสมต่อเนื่องหลายวันทำให้ดินอิ่มตัว ความดันน้ำในช่องว่างสูงขึ้น จนแรงต้านทานลดลงและเกิดการวิบัติของลาดดิน</p></div>
+      <div class="card"><div class="ic">⛰️</div><h3>ภูมิประเทศลาดชัน</h3>
+        <p>ลุ่มน้ำอย่างคลองอู่ตะเภา (สงขลา) มีภูเขาล้อมรอบและชุมชนเชิงเขาหนาแน่น จึงเป็นพื้นที่เฝ้าระวังสำคัญ</p></div>
+      <div class="card"><div class="ic">📡</div><h3>เทคโนโลยีเข้ามาช่วย</h3>
+        <p>ระบบเตือนภัยล่วงหน้าด้วยเซนเซอร์และ AI ช่วยให้แจ้งเตือนได้รวดเร็วขึ้น แม้ไฟดับหรือเน็ตล่ม</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPES -->
+<section class="alt" id="types">
+  <div class="wrap">
+    <span class="tag">นิยามและประเภท</span>
+    <h2 class="sec">ดินถล่มคืออะไร และมีกี่แบบ</h2>
+    <p class="lead">
+      กรมทรัพยากรธรณีนิยาม <b>ดินถล่ม</b> ว่าคือการเคลื่อนที่ของมวลดินและหินลงมาตามลาดเขาด้วยอิทธิพลของแรงโน้มถ่วง
+      โดยมีน้ำเข้ามาเกี่ยวข้องในการทำให้มวลดินและหินนั้นสูญเสียเสถียรภาพ
+    </p>
+    <div class="tblwrap" style="margin-bottom:18px">
+      <table>
+        <thead><tr><th>ประเภท</th><th>ลักษณะการเคลื่อนตัว</th><th>ความเร็ว</th><th>อันตราย</th></tr></thead>
+        <tbody>
+          <tr><td>ดินถล่มแบบหมุน (Rotational slide)</td><td>มวลดินหมุนลงตามระนาบโค้ง</td><td>ปานกลาง</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>ดินถล่มแบบเลื่อน (Translational slide)</td><td>เคลื่อนเป็นผืนตามระนาบเอียง</td><td>ปานกลาง–เร็ว</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>เศษดิน–หินไหล (Debris flow)</td><td>มวลดิน หิน น้ำ ไหลตามร่องน้ำ</td><td>เร็วมาก</td><td><span class="pill ph">สูงมาก</span></td></tr>
+          <tr><td>ดินไหล (Earth flow)</td><td>ดินอิ่มน้ำไหลเอื่อย</td><td>ช้า</td><td><span class="pill pl">ต่ำ–ปานกลาง</span></td></tr>
+          <tr><td>หินร่วง/หินถล่ม (Rockfall)</td><td>ก้อนหินหลุดร่วงจากหน้าผา</td><td>เร็ว</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>น้ำป่าไหลหลาก (Flash flood)</td><td>มวลน้ำผสมเศษดินเคลื่อนตามร่องน้ำ</td><td>เร็วมาก</td><td><span class="pill ph">สูงมาก</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted)">
+      ที่มา: <a href="https://www.dmr.go.th/geohazard/" target="_blank" rel="noopener">กรมทรัพยากรธรณี — ความรู้ทั่วไปด้านธรณีพิบัติภัย: ดินถล่มและน้ำป่าไหลหลาก</a>
+    </p>
+  </div>
+</section>
+
+<!-- MECHANISM -->
+<section id="mech">
+  <div class="wrap">
+    <span class="tag">กลไกการเกิด</span>
+    <h2 class="sec">ธรณีวิทยาและกลศาสตร์ของดิน</h2>
+    <p class="lead">
+      การวิบัติของลาดดินอธิบายได้ด้วยเกณฑ์เชิงกลศาสตร์ เมื่อหน่วยแรงเค้นเฉือน (τ) ที่กระทำตามระนาบวิบัติ
+      มากกว่าหรือเท่ากับกำลังต้านทานแรงเฉือนของดิน (τf) ดินจะเริ่มเคลื่อนตัว
+    </p>
+    <div class="grid g2">
+      <div>
+        <div class="formula">
+          เกณฑ์วิบัติ (Mohr–Coulomb):  <em>τ ≥ τ<sub>f</sub></em><br>
+          <em>τ<sub>f</sub></em> = c′ + (σ − u) · tan φ′<br>
+          &nbsp;&nbsp;c′ = แรงยึดเหนี่ยว (cohesion)<br>
+          &nbsp;&nbsp;φ′ = มุมเสียดทานภายใน<br>
+          &nbsp;&nbsp;σ = หน่วยแรงดิ่งรวม · u = ความดันน้ำในช่องว่างดิน
+        </div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:16px">
+          เมื่อฝนซึมลงดิน ค่า u เพิ่มขึ้น ทำให้พจน์ (σ − u) ลดลง กำลังต้านทานจึงลดลงตามไปด้วย
+          นี่คือเหตุผลที่ฝนตกหนักและต่อเนื่องเป็นตัวกระตุ้นสำคัญที่สุดของการเกิดดินถล่ม
+        </p>
+        <div class="grid g2">
+          <div class="card"><h3>ปัจจัยด้านธรณีวิทยา</h3>
+            <p>ชนิดและทิศทางเทของชั้นหิน รอยแตก รอยเลื่อน ระดับการผุพัง และความหนาของชั้นดินเหลือค้าง</p></div>
+          <div class="card"><h3>ปัจจัยด้านมนุษย์</h3>
+            <p>การตัดถนน ตัดแปลงพื้นที่เกษตร การปรับระดับดิน และการขาดระบบระบายน้ำที่ดี</p></div>
+        </div>
+      </div>
+      <figure style="margin:0;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)">
+        <svg viewBox="0 0 520 300" role="img" aria-label="ภาพตัดขวางลาดดินแสดงกลไกการวิบัติ">
+          <rect width="520" height="300" fill="#f6f3ec"/>
+          <path d="M20 112 L240 64 L500 122 L500 300 L20 300 Z" fill="#7fae86"/>
+          <path d="M20 152 L240 110 L500 162 L500 300 L20 300 Z" fill="#b98f57"/>
+          <path d="M20 202 L240 162 L500 212 L500 300 L20 300 Z" fill="#6f4a2c"/>
+          <path d="M20 202 L240 162 L500 212" stroke="#f0d3a0" stroke-width="2"/>
+          <text x="286" y="198" font-family="IBM Plex Sans Thai" font-size="11.5" fill="#f7e9c9">ระนาบวิบัติ (slip surface)</text>
+          <path d="M20 172 Q240 152 500 180" stroke="#3d8fd0" stroke-width="2.5" fill="none" stroke-dasharray="7,4"/>
+          <text x="26" y="166" font-family="IBM Plex Sans Thai" font-size="11.5" fill="#2a6fa8">ระดับน้ำใต้ดิน</text>
+          <defs>
+            <marker id="a1" markerWidth="9" markerHeight="9" refX="4.5" refY="6" orient="auto"><path d="M0 0 L9 0 L4.5 9 Z" fill="#3d8fd0"/></marker>
+            <marker id="a2" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#d9821f"/></marker>
+          </defs>
+          <g stroke="#3d8fd0" stroke-width="2" fill="none">
+            <path d="M180 42 L180 96" marker-end="url(#a1)"/><path d="M280 34 L280 92" marker-end="url(#a1)"/>
+          </g>
+          <text x="150" y="28" font-family="IBM Plex Sans Thai" font-size="11.5" fill="#2a6fa8">น้ำฝนซึมลง</text>
+          <g stroke="#d9821f" stroke-width="2.6" fill="none">
+            <path d="M300 96 L334 132" marker-end="url(#a2)"/><path d="M400 108 L434 144" marker-end="url(#a2)"/>
+          </g>
+          <text x="26" y="140" font-family="IBM Plex Sans Thai" font-size="11.5" fill="#3b5b41">ชั้นดินผุ / ดินเหลือค้าง</text>
+          <text x="26" y="284" font-family="IBM Plex Sans Thai" font-size="11.5" fill="#f0e2cd">ชั้นหินฐาน (bedrock)</text>
+        </svg>
+        <figcaption style="padding:11px 15px;font-size:12.5px;color:var(--muted);background:var(--sand);border-top:1px solid var(--line)">
+          <b style="color:var(--forest)">ภาพประกอบ:</b> เมื่อฝนซึมลงดิน ระดับน้ำใต้ดินสูงขึ้น ความดันน้ำในช่องว่าง (u) เพิ่ม กำลังต้านทานดินลดลง
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="alt" id="timeline">
+  <div class="wrap">
+    <span class="tag">เส้นเวลาเหตุการณ์</span>
+    <h2 class="sec">เหตุการณ์สำคัญในภาคใต้</h2>
+    <p class="lead">ลำดับเหตุการณ์ที่ถูกบันทึกและอ้างอิงจากแหล่งข่าว/หน่วยงาน</p>
+    <div class="grid g2">
+      <div class="timeline">
+        <div class="tlrow"><b>พ.ศ. 2553</b><p>เกิดเหตุดินถล่มในจังหวัดสงขลารวม 8 เหตุการณ์ (ข้อมูลจากการศึกษาลุ่มน้ำคลองอู่ตะเภา)</p></div>
+        <div class="tlrow"><b>พ.ศ. 2554</b><p>อุทกภัยและดินถล่มครั้งใหญ่ในภาคใต้ เกิดใน 10 จังหวัด โดยเฉพาะสุราษฎร์ธานี นครศรีธรรมราช และกระบี่</p></div>
+        <div class="tlrow"><b>พ.ศ. 2567 (พ.ย.)</b><p>กรมทรัพยากรธรณีเตือน 10 จังหวัดภาคใต้เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก ระหว่างวันที่ 21–23 พฤศจิกายน</p></div>
+      </div>
+      <div class="timeline">
+        <div class="tlrow"><b>พ.ศ. 2567–2568</b><p>รายงานดินถล่มหลายจุดใน อ.บันนังสตา จ.ยะลา และน้ำป่าทะลัก–ดินถล่มใน จ.พัทลุง ขณะที่ จ.นครศรีธรรมราช มีผู้เสียชีวิต 2 คนจากสถานการณ์ฝนตกหนักต่อเนื่อง</p></div>
+        <div class="tlrow"><b>พ.ศ. 2568 (พ.ย.)</b><p>กรมธรณีแจ้งเตือน 10 จังหวัดภาคใต้ เสี่ยงดินถล่ม–น้ำป่าไหลหลาก จากฝนที่ตกหนักต่อเนื่อง</p></div>
+        <div class="tlrow"><b>ปัจจุบัน</b><p>มีงานวิจัยในพื้นที่หลายแห่ง ทั้งระบบเตือนภัย AIoT ที่ อ.สิชล และการศึกษาแบบจำลองพื้นที่เสี่ยงในนครศรีธรรมราช</p></div>
+      </div>
+    </div>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card"><h3>📰 Thai PBS (พ.ย. 2567)</h3><p>เตือน 10 จังหวัดภาคใต้เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก</p>
+        <span class="src"><a href="https://www.thaipbs.or.th/news/content/346507" target="_blank" rel="noopener">thaipbs.or.th ↗</a></span></div>
+      <div class="card"><h3>📰 ข่าวสด</h3><p>กรมธรณีเตือน 10 จังหวัดภาคใต้ ฝนถล่มหนัก เสี่ยงดินถล่ม–น้ำป่าไหลหลาก</p>
+        <span class="src"><a href="https://www.khaosod.co.th/around-thailand/news_10033547" target="_blank" rel="noopener">khaosod.co.th ↗</a></span></div>
+      <div class="card"><h3>📰 เหตุการณ์ พ.ศ. 2554</h3><p>อุทกภัยและดินถล่มในภาคใต้ของประเทศไทย</p>
+        <span class="src"><a href="https://th.wikipedia.org/wiki/อุทกภัยและดินถล่มในภาคใต้ของประเทศไทย_พ.ศ._2554" target="_blank" rel="noopener">วิกิพีเดีย ↗</a></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP (Google Maps API) -->
+<section id="mapsec">
+  <div class="wrap">
+    <span class="tag">แผนที่รายจุด</span>
+    <h2 class="sec">จุดไหนเกิดอะไร — กดดูทีละจุด</h2>
+    <p class="lead">
+      แผนที่นี้ใช้ <b>Google Maps JavaScript API</b> ทุกหมุดคือ <b>อำเภอ/ตำบลที่ปรากฏในข่าวหรือประกาศจริง</b>
+      ไม่ใช่การเหมารวมทั้งจังหวัด และคลิกหมุดแล้วนำทางหรือเปิดข่าวต้นทางได้ทันที
+    </p>
+
+    <div class="warn">
+      <b>⚠️ ระดับความแม่นยำ:</b> หมุดนี้แสดง <b>ระดับอำเภอ/ตำบลที่มีการรายงาน</b> (ไม่ใช่พิกัด GPS จุดถล่มรายจุด)
+      เพื่อไม่ให้เข้าใจผิดว่าทั้งจังหวัดคือจุดเกิดเหตุ · พิกัดจุดจริงให้ดึงจากชั้นข้อมูล
+      <b>LANDSLIDE_EVENT</b> ของกรมทรัพยากรธรณี (พ.ศ. 2532–2562)
+    </div>
+
+    <div id="mapstatus">⏳ กำลังโหลด Google Maps…</div>
+
+    <div class="mapbar">
+      <button data-f="all" class="on">ทั้งหมด</button>
+      <button data-f="event">จุดที่เกิดเหตุจริง</button>
+      <button data-f="watch">พื้นที่เฝ้าระวัง</button>
+      <button data-f="yala">เฉพาะยะลา</button>
+      <button data-f="yaring">ทะเล อ.ยะหริ่ง</button>
+    </div>
+
+    <div class="overlaybar">
+      <span style="font-weight:600;color:var(--forest)">ชั้นข้อมูลราชการ:</span>
+      <label><input type="checkbox" id="ovHazard"> พื้นที่เสี่ยงดินถล่ม (H_LANDSLIDE)</label>
+      <label><input type="checkbox" id="ovFlash"> น้ำป่าไหลหลากรายตำบล (FLASHFLOOD_TAMBON)</label>
+      <label><input type="checkbox" id="ovLand" checked> หมุดเหตุการณ์</label>
+      <span id="ovNote" style="font-size:11.5px">จาก gis.dmr.go.th — หากเซิร์ฟเวอร์ไม่ตอบสนอง ชั้นข้อมูลจะไม่แสดง</span>
+    </div>
+
+    <div id="gmap"></div>
+
+    <div class="legend">
+      <span><i class="dot d1"></i> จุดที่รายงานว่าเกิดดินถล่ม/น้ำป่าไหลหลาก</span>
+      <span><i class="dot d2"></i> พื้นที่เฝ้าระวังจากการเตือนภัย</span>
+      <span><i class="dot d3"></i> เหตุการณ์ระดับภาค (เกิดซ้ำ)</span>
+      <span><i class="dot d4"></i> จุดอ้างอิงทะเล อ.ยะหริ่ง</span>
+      <span style="margin-left:auto">🖱️ คลิกหมุด → นำทาง + ลิงก์ข่าว</span>
+    </div>
+
+    <div class="warn" id="gmaperr">
+      <b>⚠️ โหลด Google Maps ไม่สำเร็จ</b> — สาเหตุที่พบบ่อย:
+      (1) ยังไม่เปิด <b>Maps JavaScript API</b> ในโปรเจกต์ของคีย์นี้
+      (2) คีย์ถูกจำกัด <b>HTTP referrer</b> เฉพาะโดเมนของคุณ จึงใช้ในพรีวิวไม่ได้ แต่ใช้บนเว็บจริงได้
+      (3) เครือข่ายถูกบล็อก — ลองเปิดบนเว็บจริงที่อัปโหลดแล้ว
+    </div>
+  </div>
+</section>
+
+<!-- EVENT CARDS -->
+<section class="alt" id="events">
+  <div class="wrap">
+    <span class="tag">จุดเกิดเหตุ</span>
+    <h2 class="sec">การ์ดจุดเกิดเหตุ — ระบุอำเภอ/ตำบลชัดเจน</h2>
+    <p class="lead">กดการ์ดเพื่อซูมไปยังจุดนั้นบนแผนที่ · ทุกการ์ดมีลิงก์ไปข่าวต้นทาง</p>
+    <div class="gridcards" id="cards"></div>
+  </div>
+</section>
+
+<!-- RISK TABLE -->
+<section id="risk">
+  <div class="wrap">
+    <span class="tag">พื้นที่เฝ้าระวัง</span>
+    <h2 class="sec">14 จังหวัดภาคใต้ — พื้นที่ที่ต้องจับตา</h2>
+    <p class="lead">ประมวลจากภูมิประเทศ ช่วงฝนชุกหลัก และงานวิจัยในพื้นที่ · ไม่ใช่การเหมารวมทั้งจังหวัด</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>จังหวัด</th><th>ช่วงฝนชุกหลัก</th><th>พื้นที่เฝ้าระวัง / งานวิจัย</th><th>ระดับ</th></tr></thead>
+        <tbody>
+          <tr><td>ชุมพร</td><td>พ.ย.–ธ.ค.</td><td>อ.พะโต๊ะ · หลังสวน</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>ระนอง</td><td>พ.ค.–ต.ค.</td><td>อ.กะเปอร์ · สุขสำราญ · เมืองระนอง</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>สุราษฎร์ธานี</td><td>พ.ย.–ธ.ค.</td><td>อ.ท่าชนะ · บ้านนาสาร · พนม · คีรีรัฐนิคม</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>พังงา</td><td>พ.ค.–ต.ค.</td><td>อ.ตะกั่วป่า · เมืองพังงา</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>ภูเก็ต</td><td>พ.ค.–ต.ค.</td><td>อ.กะทู้ · ถลาง</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>กระบี่</td><td>พ.ค.–ต.ค.</td><td>อ.อ่าวลึก · เขาพนม</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>นครศรีธรรมราช</td><td>พ.ย.–ธ.ค.</td><td>อ.ลานสกา · พิปูน · นบพิตำ · สิชล (ต.เทพราช/ต.สิชล)</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>ตรัง</td><td>พ.ย.–ธ.ค.</td><td>อ.สิกา · ห้วยยอด</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>พัทลุง</td><td>พ.ย.–ธ.ค.</td><td>อ.ตะโหมด · ควนขนุน</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>สตูล</td><td>พ.ค.–ต.ค.</td><td>อ.ละงู · ทุ่งหว้า</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>สงขลา</td><td>พ.ย.–ธ.ค.</td><td>ลุ่มน้ำคลองอู่ตะเภา (หาดใหญ่) · รัตภูมิ · นาทวี</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>ปัตตานี</td><td>พ.ย.–ธ.ค.</td><td>อ.โคกโพธิ์ · กะพ้อ · ยะหริ่ง</td><td><span class="pill pm">ปานกลาง</span></td></tr>
+          <tr><td>ยะลา</td><td>พ.ย.–ธ.ค.</td><td>อ.บันนังสตา · เบตง · ธารโต</td><td><span class="pill ph">สูง</span></td></tr>
+          <tr><td>นราธิวาส</td><td>พ.ย.–ธ.ค.</td><td>อ.สุคิริน · แว้ง · รือเสาะ</td><td><span class="pill ph">สูง</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:12px">
+      ต้องตรวจสอบกับ <a href="https://tswc.ldd.go.th/DownloadGIS/index_landslide.html" target="_blank" rel="noopener">ชุดข้อมูลพื้นที่เสี่ยงรายจังหวัด</a>
+      และ <a href="https://gis.dmr.go.th/arcgis/rest/services/DMR_Hazard" target="_blank" rel="noopener">บริการแผนที่ DMR_Hazard ของกรมทรัพยากรธรณี</a> ก่อนใช้ตัดสินใจ
+    </p>
+  </div>
+</section>
+
+<!-- WARNING -->
+<section class="dark" id="warning">
+  <div class="wrap">
+    <span class="tag">ระบบเตือนภัย</span>
+    <h2 class="sec">เทคโนโลยีเตือนภัยล่วงหน้าในปัจจุบัน</h2>
+    <div class="grid g2">
+      <div class="steps">
+        <div class="step"><div><b>เซนเซอร์ตรวจวัดหลายค่า</b><p>วัดการสั่นสะเทือน ความชื้นดิน ปริมาณฝน และการเอียงของพื้นดิน พร้อม GPS และจัดเก็บข้อมูลในอุปกรณ์</p></div></div>
+        <div class="step"><div><b>ประมวลผลด้วย AI</b><p>ข้อมูลจากแต่ละโหนดส่งผ่านเกตเวย์ไปประเมินความเสี่ยงด้วยแบบจำลอง AI เพื่อแจ้งเตือนได้รวดเร็ว</p></div></div>
+        <div class="step"><div><b>แจ้งเตือนหลายช่องทาง</b><p>ส่งผ่าน LINE และแดชบอร์ดเว็บ หากระบบหลักขัดข้องใช้เครือข่าย LoRaWAN สำรอง แล้วกระจายข่าวผ่านวิทยุชุมชน</p></div></div>
+        <div class="step"><div><b>แผนที่และเว็บแอปเชิงพื้นที่</b><p>งานวิจัยในพื้นที่ใช้ Google Maps API ร่วมกับไฟล์ KML ที่บันทึกค่าละติจูด/ลองจิจูด เพื่อให้ตำแหน่งจุดเสี่ยงและสถานการณ์แม่นยำและอัปเดตได้</p></div></div>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);align-self:start">
+        <h3 style="color:#fff">ตัวชี้วัดที่ระบบเฝ้าระวัง</h3>
+        <ul style="font-size:14px;color:#bcd2c5;padding-left:20px;margin:0 0 12px">
+          <li>ปริมาณฝนสะสม 24 ชั่วโมง</li>
+          <li>ฝนสะสมต่อเนื่องหลายวัน</li>
+          <li>ความชื้นในดิน (soil moisture)</li>
+          <li>การสั่นสะเทือน / การเอียงของพื้นดิน</li>
+        </ul>
+        <p style="color:#bcd2c5;font-size:14px">งานวิจัยในลุ่มน้ำคลองอู่ตะเภาเน้นพฤติกรรมการสะสมของน้ำในมวลดิน และเก็บตัวอย่างดินภาคสนามไปทดสอบในห้องปฏิบัติการเพื่อกำหนดเกณฑ์เตือนภัยที่เหมาะกับพื้นที่</p>
+        <span class="src" style="color:#8fb996;border-color:rgba(255,255,255,.14)">
+          ที่มา: <a style="color:#a9c9b5" href="https://www.wu.ac.th/th/news/26269/" target="_blank" rel="noopener">ม.วลัยลักษณ์</a> ·
+          <a style="color:#a9c9b5" href="https://www.gotoknow.org/posts/496169" target="_blank" rel="noopener">โครงการ ม.อ.–สกว.</a> ·
+          <a style="color:#a9c9b5" href="https://www.tci-thaijo.org/articles/physical01-77067" target="_blank" rel="noopener">งานวิจัยเว็บแอปเชิงพื้นที่หาดใหญ่</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMAGES -->
+<section class="alt" id="images">
+  <div class="wrap">
+    <span class="tag">ภาพเหตุการณ์</span>
+    <h2 class="sec">ภาพเหตุการณ์จริง — เปิดจากต้นทาง</h2>
+    <div class="note">
+      <b>ℹ️ ทำไมเป็น "ลิงก์" ไม่ใช่ไฟล์ภาพ?</b> ภาพข่าวเหตุการณ์จริงเป็นลิขสิทธิ์ของสำนักข่าว/หน่วยงาน
+      จึงไม่ฝังไฟล์ลงเว็บ แต่ทำการ์ดนี้ให้ <b>คลิกแล้วเปิดหน้าต้นทางซึ่งมีภาพเหตุการณ์จริง</b> พร้อมเครดิตเจ้าของภาพ
+      และสามารถติดตามสถานการณ์ล่าสุดได้จาก <a href="https://thaihelp.ai/" target="_blank" rel="noopener">thaihelp.ai</a> หรือ
+      <a href="https://dalert.disaster.go.th/" target="_blank" rel="noopener">dalert.disaster.go.th</a>
+    </div>
+    <div class="imggrid" id="imgs"></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="gloss">
+  <div class="wrap">
+    <span class="tag">อภิธานศัพท์</span>
+    <h2 class="sec">คำศัพท์ที่ควรรู้</h2>
+    <p class="lead">คำที่พบบ่อยในเอกสารและประกาศเกี่ยวกับดินถล่ม</p>
+    <div class="gloss">
+      <div class="gitem"><b>ดินถล่ม (Landslide)</b><span>การเคลื่อนที่ของมวลดินและหินลงตามลาดเขาด้วยแรงโน้มถ่วง โดยมีน้ำเกี่ยวข้อง</span></div>
+      <div class="gitem"><b>น้ำป่าไหลหลาก (Flash flood)</b><span>มวลน้ำผสมเศษดินและหินที่ไหลบ่าลงตามร่องน้ำอย่างรวดเร็วหลังฝนตกหนัก</span></div>
+      <div class="gitem"><b>เศษดิน–หินไหล (Debris flow)</b><span>การไหลของมวลดิน หิน และน้ำผสมกัน เร็วมากและมีกำลังทำลายสูง</span></div>
+      <div class="gitem"><b>ระนาบวิบัติ (Slip surface)</b><span>ระนาบที่มวลดินเลื่อนไถลลงมา เป็นผิวแบ่งระหว่างมวลที่เคลื่อนกับมวลที่อยู่กับที่</span></div>
+      <div class="gitem"><b>แรงยึดเหนี่ยว (Cohesion, c′)</b><span>แรงที่ยึดเม็ดดินไว้ด้วยกัน ช่วยต้านการวิบัติของลาดดิน</span></div>
+      <div class="gitem"><b>มุมเสียดทานภายใน (φ′)</b><span>ค่าที่บอกความต้านทานการเลื่อนไถลระหว่างเม็ดดิน</span></div>
+      <div class="gitem"><b>ความดันน้ำในช่องว่าง (u)</b><span>ความดันของน้ำที่อยู่ในช่องว่างระหว่างเม็ดดิน เพิ่มขึ้นเมื่อดินอิ่มน้ำ ทำให้กำลังต้านทานลดลง</span></div>
+      <div class="gitem"><b>ฝนสะสม (Accumulated rainfall)</b><span>ปริมาณฝนรวมในช่วงเวลาหนึ่ง ใช้เป็นเกณฑ์เฝ้าระวังดินถล่ม</span></div>
+      <div class="gitem"><b>พื้นที่เสี่ยง (Risk area)</b><span>พื้นที่ที่มีโอกาสเกิดภัยสูงจากปัจจัยภูมิประเทศ ดิน และฝน</span></div>
+      <div class="gitem"><b>ระบบเตือนภัยล่วงหน้า (EWS)</b><span>ระบบที่ตรวจจับ เฝ้าระวัง และแจ้งเตือนก่อนเกิดภัย เพื่อให้อพยพทัน</span></div>
+      <div class="gitem"><b>แผนที่เสี่ยงภัย (Susceptibility map)</b><span>แผนที่ที่จำแนกระดับความเสี่ยงการเกิดดินถล่มเชิงพื้นที่</span></div>
+      <div class="gitem"><b>KML</b><span>รูปแบบไฟล์ภูมิสารสนเทศที่เก็บค่าละติจูด/ลองจิจูด ใช้ปักหมุดบน Google Maps ได้</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt" id="faq">
+  <div class="wrap">
+    <span class="tag">คำถามที่พบบ่อย</span>
+    <h2 class="sec">FAQ เรื่องดินถล่มภาคใต้</h2>
+    <details class="acc"><summary>ดินถล่มต่างจากน้ำท่วมอย่างไร?</summary>
+      <div class="inner">น้ำท่วมคือการที่น้ำท่วมขังหรือเอ่อล้นในพื้นที่ราบ ส่วนดินถล่มคือการที่มวลดินและหินบนลาดเขาเคลื่อนตัวลงมา ทั้งสองอาจเกิดพร้อมกันได้หลังฝนตกหนัก โดยดินถล่มมักเกิดในพื้นที่ลาดชันหรือเชิงเขา</div></details>
+    <details class="acc"><summary>ทำไมบอกว่า "ดินถล่มยะลา" จึงไม่ถูกต้อง?</summary>
+      <div class="inner">เพราะยะลาแบ่งเป็นหลายอำเภอและหลายตำบล ดินถล่มที่บันทึกได้เกิดเฉพาะบางอำเภอ เช่น บันนังสตา เบตง ธารโต ไม่ได้เกิดพร้อมกันทั้งจังหวัด การบอกชื่อจังหวัดโดยไม่ระบุอำเภอ/ตำบลทำให้เข้าใจผิดเรื่องขอบเขตพื้นที่</div></details>
+    <details class="acc"><summary>ฝนตกเท่าไรจึงน่ากังวล?</summary>
+      <div class="inner">ไม่มีตัวเลขเดียวที่ใช้ได้ทุกพื้นที่ เพราะขึ้นอยู่กับความลาดชัน ชนิดดิน และความชื้นเดิมของดิน หน่วยงานจึงใช้เกณฑ์ <b>ฝนสะสม</b> รายวันและหลายวันร่วมกับข้อมูลพื้นที่เสี่ยง ประกอบการเตือนภัย</div></details>
+    <details class="acc"><summary>เห็นสัญญาณอะไรที่ต้องอพยพทันที?</summary>
+      <div class="inner">ฝนตกหนักต่อเนื่องหลายชั่วโมง, น้ำในลำธารเปลี่ยนเป็นสีขุ่นข้นหรือมีเศษไม้เพิ่มขึ้น, มีรอยแตกใหม่บนพื้นดินหรือผนังบ้าน, เสาหรือรั้วเอียง, ต้นไม้โน้มเอียงผิดปกติ หรือมีเสียงครืดคราดจากเนินเขา ให้อพยพทันทีและแจ้งเจ้าหน้าที่</div></details>
+    <details class="acc"><summary>ต้องอพยพไปทางไหน?</summary>
+      <div class="inner">เคลื่อนที่ในแนวราบออกจากเส้นทางที่คาดว่าดินและน้ำจะไหลผ่าน ขึ้นไปยังที่สูงที่มั่นคง <b>อย่าวิ่งลงเนิน</b> และหลีกเลี่ยงหุบเขากับร่องน้ำ</div></details>
+    <details class="acc"><summary>ข้อมูลพิกัดจุดเกิดเหตุจริงหาได้จากไหน?</summary>
+      <div class="inner">จากชั้นข้อมูล <b>LANDSLIDE_EVENT</b> ในบริการแผนที่ DMR_Hazard ของกรมทรัพยากรธรณี (ร่องรอยแผ่นดินถล่ม พ.ศ. 2532–2562) ซึ่งเผยแพร่เป็น CSV และ SHP ผ่าน <a href="https://gis.dmr.go.th/arcgis/rest/services/DMR_Hazard" target="_blank" rel="noopener">gis.dmr.go.th ↗</a> และ <a href="https://data.dmr.go.th/my_MM/dataset/landslide_inventory_map" target="_blank" rel="noopener">data.dmr.go.th ↗</a></div></details>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section id="safety">
+  <div class="wrap">
+    <span class="tag">ความปลอดภัย</span>
+    <h2 class="sec">วิธีรับมือและช่องทางติดตามประกาศ</h2>
+    <div class="grid g3" style="margin-bottom:26px">
+      <div class="card"><h3>1. ก่อนเกิด</h3><p>ตรวจว่าบ้านอยู่ในพื้นที่เสี่ยงหรือไม่ เตรียมกระเป๋าฉุกเฉิน ยา น้ำดื่ม และนัดจุดรวมตัวครอบครัว</p></div>
+      <div class="card"><h3>2. ติดตามประกาศ</h3><p>ฟังประกาศจากหน่วยงานทางการเท่านั้น ไม่เชื่อข่าวลือ และอพยพทันทีเมื่อถูกขอ</p></div>
+      <div class="card"><h3>3. ขณะเกิด</h3><p><b>อย่าวิ่งลงเนิน</b> เคลื่อนออกด้านข้างจากเส้นทางไหลของดิน/น้ำ ขึ้นที่สูงที่มั่นคง</p></div>
+      <div class="card"><h3>4. สังเกตสัญญาณเตือน</h3><p>ฝนหนักต่อเนื่อง · น้ำลำธารขุ่นข้น · รอยแตกใหม่ · ต้นไม้เอียง · เสียงครืดคราดจากเนินเขา</p></div>
+      <div class="card"><h3>5. หลังเกิด</h3><p>อย่ากลับเข้าพื้นที่ทันที ดินอาจยังเคลื่อนตัว แจ้งเจ้าหน้าที่หากมีผู้ติดค้าง</p></div>
+      <div class="card"><h3>6. ฝึกซ้อม</h3><p>งานวิจัยในพื้นที่จัดการฝึกอบรมชุมชนให้รู้เส้นทางและพื้นที่ปลอดภัย (Safety Area)</p></div>
+    </div>
+    <h3 style="margin:0 0 14px;font-size:18px">📞 เบอร์ติดต่อหน่วยงาน</h3>
+    <div class="phones">
+      <div class="ph-box"><b>ปภ. แจ้งเหตุสาธารณภัย</b><span class="n">1784</span><span>ฉุกเฉิน 24 ชั่วโมง</span></div>
+      <div class="ph-box"><b>กรมทรัพยากรธรณี</b><span class="n">02-621-9600</span><span>ข้อมูลธรณีพิบัติภัย · กทม.</span></div>
+      <div class="ph-box"><b>สนง.ทรัพยากรธรณี เขต 4</b><span class="n">077-311-949</span><span>ดูแลภาคใต้ · สุราษฎร์ธานี</span></div>
+      <div class="ph-box"><b>กรมพัฒนาที่ดิน</b><span class="n">1760</span><span>ข้อมูลพื้นที่เสี่ยงดินถล่ม</span></div>
+      <div class="ph-box"><b>ฉุกเฉินทั่วไป</b><span class="n">191 / 1669</span><span>ตำรวจ / เจ็บป่วยฉุกเฉิน</span></div>
+      <div class="ph-box"><b>อุตุนิยมวิทยา</b><span class="n">1182</span><span>พยากรณ์และเตือนฝนตกหนัก</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div>
+        <h4>เกี่ยวกับระบบสารสนเทศนี้</h4>
+        <p style="font-size:13px;line-height:1.7;color:#a9c9b5">
+          ระบบสารสนเทศและการเรียนรู้ภัยพิบัติดินถล่มในพื้นที่ภาคใต้ รวบรวมองค์ความรู้จากงานวิจัยในพื้นที่
+          แผนที่จุดเกิดเหตุรายอำเภอ/ตำบล ระบบเตือนภัย และแนวทางรับมือ โดยอ้างอิงแหล่งข้อมูลที่ตรวจสอบได้
+          และไม่สร้างพิกัดขึ้นเอง
+        </p>
+      </div>
+      <div>
+        <h4>เอกสารอ้างอิง</h4>
+        <ul>
+          <li><a href="https://www.dmr.go.th/geohazard/" target="_blank" rel="noopener">กรมทรัพยากรธรณี — ดินถล่มและน้ำป่าไหลหลาก</a></li>
+          <li><a href="https://gis.dmr.go.th/arcgis/rest/services/DMR_Hazard" target="_blank" rel="noopener">DMR_Hazard — LANDSLIDE_EVENT, H_LANDSLIDE</a></li>
+          <li><a href="https://www.thaipbs.or.th/news/content/346507" target="_blank" rel="noopener">Thai PBS — เตือน 10 จังหวัด (พ.ย. 2567)</a></li>
+          <li><a href="https://www.khaosod.co.th/around-thailand/news_10033547" target="_blank" rel="noopener">ข่าวสด — กรมธรณีเตือน 10 จังหวัด</a></li>
+          <li><a href="https://th.wikipedia.org/wiki/อุทกภัยและดินถล่มในภาคใต้ของประเทศไทย_พ.ศ._2554" target="_blank" rel="noopener">อุทกภัยและดินถล่มภาคใต้ พ.ศ. 2554</a></li>
+          <li><a href="https://www.wu.ac.th/th/news/26269/" target="_blank" rel="noopener">ม.วลัยลักษณ์ — ระบบเตือนภัย AIoT</a></li>
+          <li><a href="https://www.gotoknow.org/posts/496169" target="_blank" rel="noopener">ลุ่มน้ำคลองอู่ตะเภา — ม.อ.–สกว.</a></li>
+          <li><a href="https://www.tci-thaijo.org/articles/physical01-77067" target="_blank" rel="noopener">เว็บแอปเชิงพื้นที่เตือนภัยน้ำท่วม หาดใหญ่ (Google Maps API + KML)</a></li>
+          <li><a href="https://thaihelp.ai/" target="_blank" rel="noopener">thaihelp.ai — แผนที่สถานการณ์ภัย</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ช่องทางติดต่อ</h4>
+        <ul>
+          <li>☎️ แจ้งเหตุสาธารณภัย: 1784</li>
+          <li>☎️ กรมทรัพยากรธรณี: 02-621-9600</li>
+          <li>☎️ สนง.ทรัพยากรธรณี เขต 4: 077-311-949</li>
+          <li>🌐 ระบบแจ้งเหตุ ปภ.: dalert.disaster.go.th</li>
+        </ul>
+      </div>
+    </div>
+    <div class="credit">
+      <div style="display:flex;align-items:center;gap:13px">
+        <div class="av">ND</div>
+        <div>
+          <b>นัสรียา ดาราแม (Nasriya Daramae)</b>
+          <span>ผู้จัดทำ · รหัสนักศึกษา 6820210574</span>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:#8aa896;max-width:470px;line-height:1.6">
+        หมุดแสดงตำแหน่งระดับอำเภอ/ตำบลที่รายงาน · ภาพเหตุการณ์เป็นลิงก์ไปยังหน้าข่าวต้นทาง ·
+        ภาพประกอบในเว็บเป็นภาพวาด ไม่ใช่ภาพถ่ายเหตุการณ์จริง · แผนที่ใช้ Google Maps JavaScript API
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   🔑 Google Maps API Key — แก้ที่เดียว
+   ============================================================ */
+const GMAPS_API_KEY = "AIzaSyC5l0aPyGFqiqY5DpqOYf-8YhN_eYHHobU";
+
+/* ================= จุดเกิดเหตุ — อ้างอิงข่าว/ประกาศจริง ================= */
+const EVENTS = [
+ {id:"YLA-01",t:"event",prov:"ยะลา",amp:"บันนังสตา",tam:"—",lat:6.2500,lng:101.2800,
+  title:"ดินถล่มหลายจุด อ.บันนังสตา",
+  desc:"รายงานดินถล่มหลายจุดในพื้นที่อำเภอบันนังสตา ขณะที่ อ.เมืองปัตตานี 3 ตำบลท่วมสูง 1–2 เมตร กระทบกว่า 300 ครัวเรือน",
+  src:"Thai PBS",url:"https://www.facebook.com/ThaiPBS/videos/917452653311645/",multi:1},
+
+ {id:"YLA-02",t:"event",prov:"ยะลา",amp:"ธารโต",tam:"—",lat:6.0800,lng:101.3600,
+  title:"พื้นที่เฝ้าระวัง จ.ยะลา",
+  desc:"ยะลาถูกจัดในพื้นที่เฝ้าระวังดินถล่ม–น้ำป่าไหลหลากของกรมทรัพยากรธรณี (เฉพาะบางอำเภอ ไม่ใช่ทั้งจังหวัด)",
+  src:"กรมทรัพยากรธรณี",url:"https://www.dmr.go.th/geohazard/"},
+
+ {id:"PTN-SEA",t:"sea",prov:"ปัตตานี",amp:"ยะหริ่ง",tam:"—",lat:6.9500,lng:101.3000,
+  title:"ทะเลอำเภอยะหริ่ง จ.ปัตตานี",
+  desc:"จุดอ้างอิงพื้นที่ทะเล/อ่าวปัตตานี บริเวณชายฝั่งอำเภอยะหริ่ง ใช้เทียบตำแหน่งเชิงภูมิศาสตร์",
+  src:"Google Maps",url:"https://www.google.com/maps/place/Yaring,+Pattani"},
+
+ {id:"PTH-01",t:"event",prov:"พัทลุง",amp:"—",tam:"—",lat:7.5500,lng:100.0500,
+  title:"น้ำป่าทะลัก–ดินถล่ม จ.พัทลุง",
+  desc:"รายงานน้ำป่าทะลักและดินถล่มในพื้นที่จังหวัดพัทลุง จากสถานการณ์ฝนตกหนักต่อเนื่องหลายวัน",
+  src:"TNN16",url:"https://www.facebook.com/TNN16LIVE/videos/714194994569698/",multi:1},
+
+ {id:"NST-01",t:"event",prov:"นครศรีธรรมราช",amp:"—",tam:"—",lat:8.4300,lng:99.9600,
+  title:"น้ำท่วม–ดินถล่ม นครศรีฯ เสียชีวิต 2",
+  desc:"ฝนตกหนักต่อเนื่องเป็นวันที่ 4 ทำให้เกิดน้ำท่วมเกือบทุกอำเภอและมีผู้เสียชีวิต 2 คน",
+  src:"TNN16",url:"https://www.facebook.com/TNN16LIVE/videos/714194994569698/",multi:1},
+
+ {id:"NST-02",t:"event",prov:"นครศรีธรรมราช",amp:"สิชล",tam:"เทพราช, สิชล",lat:8.9500,lng:99.9000,
+  title:"พื้นที่เสี่ยงสูง อ.สิชล (ต.เทพราช/ต.สิชล)",
+  desc:"ต.เทพราช และ ต.สิชล ถูกจัดเป็นพื้นที่เสี่ยงสูง กระทบมากกว่า 1,000 ครัวเรือน · มีงานวิจัยระบบเตือนภัย AIoT ม.วลัยลักษณ์",
+  src:"ม.วลัยลักษณ์",url:"https://www.wu.ac.th/th/news/26269/"},
+
+ {id:"SKL-01",t:"event",prov:"สงขลา",amp:"หาดใหญ่",tam:"ลุ่มน้ำคลองอู่ตะเภา",lat:7.0000,lng:100.4500,
+  title:"ลุ่มน้ำคลองอู่ตะเภา — พื้นที่ศึกษาระบบเตือนภัย",
+  desc:"พื้นที่วิจัยประเมินความเสี่ยงและพัฒนาแบบจำลองระบบเตือนภัย · สงขลาเกิดดินถล่ม 8 เหตุการณ์ตั้งแต่ พ.ศ. 2553",
+  src:"โครงการ ม.อ.–สกว.",url:"https://www.gotoknow.org/posts/496169"},
+
+ {id:"SRT-01",t:"event",prov:"สุราษฎร์ธานี",amp:"—",tam:"—",lat:9.1300,lng:99.3300,
+  title:"ดินถล่มรุนแรง สุราษฎร์ธานี (พ.ศ. 2554)",
+  desc:"หนึ่งในจังหวัดที่เกิดอุทกภัยและดินถล่มรุนแรงในเหตุการณ์ภาคใต้ พ.ศ. 2554",
+  src:"วิกิพีเดีย",url:"https://th.wikipedia.org/wiki/อุทกภัยและดินถล่มในภาคใต้ของประเทศไทย_พ.ศ._2554",multi:1},
+
+ {id:"KBI-01",t:"event",prov:"กระบี่",amp:"—",tam:"—",lat:8.0863,lng:98.9063,
+  title:"ดินถล่มรุนแรง กระบี่ (พ.ศ. 2554)",
+  desc:"หนึ่งในจังหวัดที่เกิดอุทกภัยและดินถล่มรุนแรงในเหตุการณ์ภาคใต้ พ.ศ. 2554",
+  src:"วิกิพีเดีย",url:"https://th.wikipedia.org/wiki/อุทกภัยและดินถล่มในภาคใต้ของประเทศไทย_พ.ศ._2554",multi:1},
+
+ {id:"TRG-01",t:"event",prov:"ตรัง",amp:"—",tam:"—",lat:7.5563,lng:99.6114,
+  title:"พื้นที่เฝ้าระวัง จ.ตรัง",
+  desc:"อยู่ในกลุ่ม 10 จังหวัดภาคใต้ที่กรมทรัพยากรธรณีเตือนให้เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก",
+  src:"ข่าวสด",url:"https://www.khaosod.co.th/around-thailand/news_10033547"},
+
+ {id:"WCP-01",t:"watch",prov:"ชุมพร",amp:"พะโต๊ะ",tam:"—",lat:9.8000,lng:98.7500,
+  title:"เฝ้าระวัง อ.พะโต๊ะ",
+  desc:"พื้นที่เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก ช่วงฝนชุก พ.ย.–ธ.ค.",
+  src:"ปชส.ยะลา",url:"https://www.facebook.com/PRD.PrYala/posts/1554545296708890/"},
+
+ {id:"WRN-01",t:"watch",prov:"ระนอง",amp:"กะเปอร์",tam:"—",lat:9.5500,lng:98.6500,
+  title:"เฝ้าระวัง อ.กะเปอร์",
+  desc:"พื้นที่เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก (ระนองมีฝนชุกที่สุดของภาค)",
+  src:"ปชส.ยะลา",url:"https://www.facebook.com/PRD.PrYala/posts/1554545296708890/"},
+
+ {id:"WRN-02",t:"watch",prov:"ระนอง",amp:"สุขสำราญ",tam:"—",lat:9.3800,lng:98.4200,
+  title:"เฝ้าระวัง อ.สุขสำราญ",
+  desc:"พื้นที่เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก",
+  src:"ปชส.ยะลา",url:"https://www.facebook.com/PRD.PrYala/posts/1554545296708890/"},
+
+ {id:"WSR-01",t:"watch",prov:"สุราษฎร์ธานี",amp:"ท่าชนะ",tam:"—",lat:9.7000,lng:99.2000,
+  title:"เฝ้าระวัง อ.ท่าชนะ",
+  desc:"พื้นที่เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก",
+  src:"ปชส.ยะลา",url:"https://www.facebook.com/PRD.PrYala/posts/1554545296708890/"},
+
+ {id:"WPKT-01",t:"watch",prov:"ภูเก็ต",amp:"—",tam:"—",lat:7.9000,lng:98.3500,
+  title:"เฝ้าระวัง จ.ภูเก็ต",
+  desc:"อยู่ในกลุ่มจังหวัดที่ถูกเตือนให้เฝ้าระวังดินถล่ม–น้ำป่าไหลหลาก",
+  src:"Thai PBS",url:"https://www.thaipbs.or.th/news/content/346507"},
+
+ {id:"WPNG-01",t:"watch",prov:"พังงา",amp:"—",tam:"—",lat:8.4400,lng:98.5200,
+  title:"เฝ้าระวัง จ.พังงา",
+  desc:"อยู่ในกลุ่ม 10 จังหวัดภาคใต้ที่ถูกเตือนให้เฝ้าระวัง",
+  src:"Thai PBS",url:"https://www.thaipbs.or.th/news/content/346507"},
+
+ {id:"WSTN-01",t:"watch",prov:"สตูล",amp:"—",tam:"—",lat:6.6200,lng:100.0700,
+  title:"เฝ้าระวัง จ.สตูล",
+  desc:"อยู่ในกลุ่ม 10 จังหวัดภาคใต้ที่ถูกเตือนให้เฝ้าระวัง",
+  src:"Thai PBS",url:"https://www.thaipbs.or.th/news/content/346507"},
+
+ {id:"WNRT-01",t:"watch",prov:"นราธิวาส",amp:"สุคิริน",tam:"—",lat:5.9200,lng:101.7700,
+  title:"เฝ้าระวัง อ.สุคิริน",
+  desc:"พื้นที่เทือกเขาตอนใน ช่วงฝนชุก พ.ย.–ธ.ค.",
+  src:"กรมทรัพยากรธรณี",url:"https://www.dmr.go.th/map_service/geohazard_map/"}
+];
+
+/* ================= สถานะ ================= */
+let gmap = null, infoWin = null;
+const markerMap = {};
+let modeFilter = "all";
+const SOUTH = { lat: 7.6, lng: 100.3, zoom: 7 };
+const YALA  = { lat: 6.2, lng: 101.2, zoom: 9 };
+const YARING= { lat: 6.95, lng: 101.30, zoom: 12 };
+let ovHazardType = null, ovFlashType = null;
+
+/* ================= helpers ================= */
+function setStatus(msg, cls){
+  const el = document.getElementById("mapstatus");
+  el.textContent = msg;
+  el.className = cls || "";
+}
+function colorOf(e){
+  if(e.t === "watch") return { fill:"#f0a94a", stroke:"#9c6b43" };
+  if(e.t === "sea")   return { fill:"#1d4ed8", stroke:"#0b2f98" };
+  if(e.multi)         return { fill:"#8a5410", stroke:"#5b1a10" };
+  return { fill:"#b4341f", stroke:"#7f1d1d" };
+}
+function iwHTML(e){
+  const dir = "https://www.google.com/maps/dir/?api=1&destination=" + e.lat + "," + e.lng;
+  const gq  = "https://www.google.com/maps/search/?api=1&query=" + e.lat + "," + e.lng;
+  const kind = e.t === "event" ? "จุดเกิดเหตุ" : (e.t === "sea" ? "จุดอ้างอิง" : "พื้นที่เฝ้าระวัง");
+  return '<div class="iw">'
+   + '<div class="pc">' + e.id + ' · ' + kind + '</div>'
+   + '<h4>' + e.title + '</h4><table>'
+   + '<tr><td>อำเภอ</td><td>อ.' + e.amp + '</td></tr>'
+   + '<tr><td>ตำบล</td><td>' + (e.tam === "—" ? "—" : e.tam) + '</td></tr>'
+   + '<tr><td>จังหวัด</td><td>จ.' + e.prov + '</td></tr>'
+   + '<tr><td>ความแม่นยำ</td><td>ระดับอำเภอ (ไม่ใช่ GPS จุดจริง)</td></tr>'
+   + '<tr><td>พิกัด</td><td>' + e.lat.toFixed(4) + ', ' + e.lng.toFixed(4) + '</td></tr>'
+   + '<tr><td>รายละเอียด</td><td>' + e.desc + '</td></tr>'
+   + '</table><p style="margin:8px 0 0">'
+   + '<a href="' + dir + '" target="_blank" rel="noopener">🛣️ นำทาง</a> · '
+   + '<a href="' + gq + '" target="_blank" rel="noopener">📍 เปิดใน Maps</a> · '
+   + '<a href="' + e.url + '" target="_blank" rel="noopener">📰 ' + e.src + '</a>'
+   + '</p></div>';
+}
+
+/* ================= ชั้นข้อมูล ArcGIS ของกรมทรัพยากรธรณี ================= */
+function arcgisOverlay(url, label){
+  return new google.maps.ImageMapType({
+    getTileUrl: function(coord, zoom){
+      const z = Math.min(zoom, 18);
+      return url + "/tile/" + z + "/" + coord.y + "/" + coord.x;
+    },
+    tileSize: new google.maps.Size(256, 256),
+    opacity: 0.65,
+    name: label
+  });
+}
+
+/* ================= init ================= */
+function initMap(){
+  setStatus("✅ Google Maps พร้อมใช้งาน — คลิกหมุดเพื่อดูรายละเอียด", "ok");
+  document.getElementById("gmaperr").style.display = "none";
+
+  gmap = new google.maps.Map(document.getElementById("gmap"), {
+    center: { lat: SOUTH.lat, lng: SOUTH.lng },
+    zoom: SOUTH.zoom,
+    mapTypeControl: true,
+    mapTypeControlOptions: { position: google.maps.ControlPosition.TOP_RIGHT },
+    streetViewControl: true,
+    fullscreenControl: true,
+    gestureHandling: "greedy",
+    restriction: {
+      latLngBounds: { north: 11.2, south: 5.2, west: 97.2, east: 102.8 },
+      strictBounds: false
+    }
+  });
+
+  infoWin = new google.maps.InfoWindow();
+
+  EVENTS.forEach(function(e){
+    const c = colorOf(e);
+    const marker = new google.maps.Marker({
+      position: { lat: e.lat, lng: e.lng },
+      map: gmap,
+      title: e.id + " · " + e.title,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: e.t === "sea" ? 9 : (e.t === "event" ? 8 : 7),
+        fillColor: c.fill,
+        fillOpacity: 1,
+        strokeColor: c.stroke,
+        strokeWeight: 2
+      }
+    });
+    marker.addListener("click", function(){
+      infoWin.setContent(iwHTML(e));
+      infoWin.open(gmap, marker);
+    });
+    markerMap[e.id] = { marker: marker, data: e };
+  });
+
+  /* ชั้นข้อมูลราชการ */
+  ovHazardType = arcgisOverlay(
+    "https://gis.dmr.go.th/arcgis/rest/services/DMR_Hazard/H_LANDSLIDE/MapServer", "H_LANDSLIDE");
+  ovFlashType = arcgisOverlay(
+    "https://gis.dmr.go.th/arcgis/rest/services/DMR_Hazard/FLASHFLOOD_TAMBON/MapServer", "FLASHFLOOD_TAMBON");
+
+  document.getElementById("ovHazard").addEventListener("change", function(){
+    if(this.checked){
+      gmap.overlayMapTypes.push(ovHazardType);
+      setStatus("🗺️ เปิดชั้นข้อมูลพื้นที่เสี่ยงดินถล่ม (H_LANDSLIDE) — หากไม่แสดง เซิร์ฟเวอร์อาจปฏิเสธการเชื่อมต่อ", "ok");
+    } else {
+      const arr = gmap.overlayMapTypes;
+      for(let i = arr.getLength() - 1; i >= 0; i--){
+        if(arr.getAt(i) === ovHazardType) arr.removeAt(i);
+      }
+      setStatus("ปิดชั้นข้อมูลพื้นที่เสี่ยงดินถล่ม", "");
+    }
+  });
+
+  document.getElementById("ovFlash").addEventListener("change", function(){
+    if(this.checked){
+      gmap.overlayMapTypes.push(ovFlashType);
+      setStatus("🗺️ เปิดชั้นข้อมูลน้ำป่าไหลหลากรายตำบล (FLASHFLOOD_TAMBON)", "ok");
+    } else {
+      const arr = gmap.overlayMapTypes;
+      for(let i = arr.getLength() - 1; i >= 0; i--){
+        if(arr.getAt(i) === ovFlashType) arr.removeAt(i);
+      }
+      setStatus("ปิดชั้นข้อมูลน้ำป่าไหลหลาก", "");
+    }
+  });
+
+  document.getElementById("ovLand").addEventListener("change", function(){
+    Object.keys(markerMap).forEach(function(id){
+      const rec = markerMap[id];
+      const show = this.checked && visible(rec.data);
+      rec.marker.setMap(show ? gmap : null);
+    }, this);
+  });
+
+  buildCards();
+  applyFilter();
+}
+
+/* ================= ตัวกรอง ================= */
+function visible(e){
+  if(modeFilter === "event" && e.t !== "event") return false;
+  if(modeFilter === "watch" && e.t !== "watch") return false;
+  if(modeFilter === "yala" && e.prov !== "ยะลา") return false;
+  if(modeFilter === "yaring" && e.amp !== "ยะหริ่ง") return false;
+  return true;
+}
+function applyFilter(){
+  const landOn = document.getElementById("ovLand").checked;
+  Object.keys(markerMap).forEach(function(id){
+    const rec = markerMap[id];
+    rec.marker.setMap((landOn && visible(rec.data)) ? gmap : null);
+  });
+}
+function viewFor(filter){
+  if(!gmap) return;
+  if(filter === "yala"){ gmap.setCenter({lat:YALA.lat,lng:YALA.lng}); gmap.setZoom(YALA.zoom); }
+  else if(filter === "yaring"){ gmap.setCenter({lat:YARING.lat,lng:YARING.lng}); gmap.setZoom(YARING.zoom); }
+  else { gmap.setCenter({lat:SOUTH.lat,lng:SOUTH.lng}); gmap.setZoom(SOUTH.zoom); }
+}
+
+/* ปุ่มกรอง */
+const mapBtns = document.querySelectorAll(".mapbar button");
+Array.prototype.slice.call(mapBtns).forEach(function(b){
+  b.addEventListener("click", function(){
+    Array.prototype.slice.call(mapBtns).forEach(function(x){ x.classList.remove("on"); });
+    b.classList.add("on");
+    modeFilter = b.getAttribute("data-f");
+    if(gmap){ applyFilter(); viewFor(modeFilter); }
+  });
+});
+
+/* ================= การ์ดจุดเกิดเหตุ ================= */
+function buildCards(){
+  const cardsEl = document.getElementById("cards");
+  cardsEl.innerHTML = "";
+  EVENTS.filter(function(e){ return e.t === "event"; }).forEach(function(e){
+    const d = document.createElement("div");
+    d.className = "ecard" + (e.multi ? "" : " watch");
+    d.innerHTML = '<div class="body"><div class="code">' + e.id + '</div>'
+      + '<h3>' + e.title + '</h3>'
+      + '<p>อ.' + e.amp + (e.tam !== "—" ? " · ต." + e.tam : "") + ' · จ.' + e.prov
+      + '<br>' + e.desc + '</p>'
+      + '<div class="meta">📰 ' + e.src + ' ↗</div></div>';
+    d.addEventListener("click", function(){
+      if(!gmap) return;
+      const rec = markerMap[e.id];
+      if(!rec) return;
+      gmap.panTo({ lat: e.lat, lng: e.lng });
+      gmap.setZoom(e.prov === "ยะลา" ? 11 : 12);
+      infoWin.setContent(iwHTML(e));
+      infoWin.open(gmap, rec.marker);
+      document.getElementById("gmap").scrollIntoView({ behavior:"smooth", block:"center" });
+    });
+    cardsEl.appendChild(d);
+  });
+}
+
+/* ================= การ์ดภาพ (ลิงก์ไปข่าวต้นทาง) ================= */
+const IMGS = [
+ {t:"ดินถล่มหลายจุด · อ.บันนังสตา จ.ยะลา",c:"จากรายงานข่าว Thai PBS — เปิดหน้าเพื่อดูภาพเหตุการณ์จริง",
+  src:"Thai PBS",bg:"linear-gradient(135deg,#5b1a10,#b4341f)",
+  url:"https://www.facebook.com/ThaiPBS/videos/917452653311645/"},
+ {t:"น้ำป่าทะลัก–ดินถล่ม จ.พัทลุง",c:"จากรายงานข่าว TNN16 — เปิดหน้าเพื่อดูภาพเหตุการณ์จริง",
+  src:"TNN16",bg:"linear-gradient(135deg,#4a2a10,#d9821f)",
+  url:"https://www.facebook.com/TNN16LIVE/videos/714194994569698/"},
+ {t:"เตือน 10 จังหวัดภาคใต้ เฝ้าระวังดินถล่ม",c:"Thai PBS — ประกาศและภาพประกอบพื้นที่เสี่ยง (พ.ย. 2567)",
+  src:"Thai PBS",bg:"linear-gradient(135deg,#173325,#4a7c59)",
+  url:"https://www.thaipbs.or.th/news/content/346507"},
+ {t:"กรมธรณีเตือน 10 จังหวัด ฝนถล่มหนัก",c:"ข่าวสด — รายชื่อจังหวัดและภาพสถานการณ์",
+  src:"ข่าวสด",bg:"linear-gradient(135deg,#3a2e10,#8a5410)",
+  url:"https://www.khaosod.co.th/around-thailand/news_10033547"},
+ {t:"อุทกภัยและดินถล่มภาคใต้ พ.ศ. 2554",c:"วิกิพีเดีย — ภาพและข้อมูลเหตุการณ์ครั้งใหญ่",
+  src:"วิกิพีเดีย",bg:"linear-gradient(135deg,#1c3a2d,#2c5540)",
+  url:"https://th.wikipedia.org/wiki/อุทกภัยและดินถล่มในภาคใต้ของประเทศไทย_พ.ศ._2554"},
+ {t:"ชุดข้อมูลร่องรอยแผ่นดินถล่ม (2532–2562)",c:"กรมทรัพยากรธรณี — ดาวน์โหลดพิกัดจุดเกิดเหตุจริง CSV/SHP",
+  src:"data.dmr.go.th",bg:"linear-gradient(135deg,#12331f,#2c5540)",
+  url:"https://data.dmr.go.th/my_MM/dataset/landslide_inventory_map"},
+ {t:"ระบบเตือนภัย AIoT ดินถล่ม (อ.สิชล)",c:"ม.วลัยลักษณ์ — ภาพและรายละเอียดงานวิจัย",
+  src:"ม.วลัยลักษณ์",bg:"linear-gradient(135deg,#0f2a1c,#4a7c59)",
+  url:"https://www.wu.ac.th/th/news/26269/"},
+ {t:"พื้นที่เสี่ยงดินถล่มรายจังหวัด",c:"ศูนย์เตือนภัยดินถล่มและน้ำป่าไหลหลาก — ดาวน์โหลดข้อมูล GIS",
+  src:"tswc.ldd.go.th",bg:"linear-gradient(135deg,#26320f,#6b7a3a)",
+  url:"https://tswc.ldd.go.th/DownloadGIS/index_landslide.html"},
+ {t:"แผนที่สถานการณ์ภัยเรียลไทม์",c:"thaihelp.ai — รายงานสถานะรายจังหวัดและช่องทางช่วยเหลือผู้ประสบภัย",
+  src:"thaihelp.ai",bg:"linear-gradient(135deg,#0d2b3a,#2a6fa8)",
+  url:"https://thaihelp.ai/"},
+ {t:"ระบบแจ้งเหตุสาธารณภัย ปภ.",c:"dalert.disaster.go.th — ประกาศและแจ้งเหตุจากกรมป้องกันและบรรเทาสาธารณภัย",
+  src:"dalert.disaster.go.th",bg:"linear-gradient(135deg,#3a1a10,#b4341f)",
+  url:"https://dalert.disaster.go.th/"},
+ {t:"บริการแผนที่ DMR_Hazard",c:"กรมทรัพยากรธรณี — ชั้นข้อมูล LANDSLIDE_EVENT · H_LANDSLIDE · FLASHFLOOD_TAMBON",
+  src:"gis.dmr.go.th",bg:"linear-gradient(135deg,#152f1f,#4a7c59)",
+  url:"https://gis.dmr.go.th/arcgis/rest/services/DMR_Hazard"}
+];
+const imgsEl = document.getElementById("imgs");
+IMGS.forEach(function(x){
+  const a = document.createElement("a");
+  a.className = "imgcard"; a.href = x.url; a.target = "_blank"; a.rel = "noopener";
+  a.innerHTML = '<div class="thumb" style="background:' + x.bg + '">🖼️<span class="lab">' + x.src + '</span></div>'
+    + '<div class="cap"><b>' + x.t + '</b><span>' + x.c + '</span><span class="go">เปิดดูภาพต้นทาง ↗</span></div>';
+  imgsEl.appendChild(a);
+});
+
+/* ================= เมนูมือถือ ================= */
+document.getElementById("burger").addEventListener("click", function(){
+  document.getElementById("nav").classList.toggle("open");
+});
+Array.prototype.slice.call(document.querySelectorAll(".nav a")).forEach(function(a){
+  a.addEventListener("click", function(){ document.getElementById("nav").classList.remove("open"); });
+});
+
+/* ================= โหลด Google Maps ================= */
+(function loadGoogleMaps(){
+  if(!GMAPS_API_KEY || GMAPS_API_KEY.indexOf("AIza") !== 0){
+    setStatus("⚠️ ยังไม่ได้ระบุ API Key ที่ถูกต้องในตัวแปร GMAPS_API_KEY", "err");
+    document.getElementById("gmaperr").style.display = "block";
+    return;
+  }
+  window.__gmapsReady = function(){
+    try { initMap(); }
+    catch(err){
+      setStatus("⚠️ เกิดข้อผิดพลาดตอนสร้างแผนที่: " + err.message, "err");
+      document.getElementById("gmaperr").style.display = "block";
+    }
+  };
+  const s = document.createElement("script");
+  s.src = "https://maps.googleapis.com/maps/api/js?key="
+        + encodeURIComponent(GMAPS_API_KEY) + "&v=weekly&language=th&region=TH&callback=__gmapsReady";
+  s.async = true; s.defer = true;
+  s.onerror = function(){
+    setStatus("⚠️ เบราว์เซอร์โหลดสคริปต์ Google Maps ไม่สำเร็จ", "err");
+    document.getElementById("gmaperr").style.display = "block";
+  };
+  document.head.appendChild(s);
+
+  setTimeout(function(){
+    if(!gmap){
+      setStatus("⚠️ หมดเวลาโหลด Google Maps (15 วินาที) — ตรวจสอบคีย์และการเชื่อมต่อ", "err");
+      document.getElementById("gmaperr").style.display = "block";
+    }
+  }, 15000);
+})();
+</script>
+</body>
+</html>
